@@ -1,0 +1,23 @@
+echo "🔍 Rodando validações antes do commit..."
+
+# Formatar automaticamente os arquivos com Biome
+npx biome format --write .
+
+# Rodar o linter com Biome
+npx biome ci . || {
+  echo "❌ Erros de lint encontrados pelo Biome! Corrija antes de fazer o commit."
+  exit 1  # Impede o commit se houver erro
+}
+
+echo "✅ Código validado pelo Biome com sucesso!"
+
+# Rodar npm audit para verificar vulnerabilidades
+echo "🔒 Verificando vulnerabilidades com npm audit..."
+npm audit || {
+  echo "⚠️ Vulnerabilidades encontradas pelo npm audit! Execute 'npm audit fix' ou corrija manualmente."
+  exit 1  # Impede o commit se houver vulnerabilidades
+}
+
+echo "✅ Nenhuma vulnerabilidade crítica encontrada pelo npm audit!"
+echo "🎉 Todas as validações passaram! Commit permitido."
+exit 0  # Permite o commit se tudo estiver ok
