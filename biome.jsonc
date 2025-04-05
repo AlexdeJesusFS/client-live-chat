@@ -1,0 +1,36 @@
+{
+  // Define o schema para validar o arquivo de configuração
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  //regras para o sistema de controle de versão (vcs)
+  "vcs": {
+    "enabled": true, //indica se a integração com o VCS está ativada
+    "clientKind": "git", //especifica que o VCS usado é o git
+    "useIgnoreFile": true //faz com que também ignore arquivos do .gitignore
+  },
+  "files": {
+    "ignoreUnknown": false, //se true, ignora arquivos desconhecidos. Aqui, está desativado
+    //lista de arquivos e diretórios ignorados pelo Biome
+    "ignore": ["package-lock.json", "package.json", "public/", ".husky/", "assets/"],
+    //define o tamanho máximo permitido para arquivos analisados (2.5 MiB), ellipsesAnimation.json é 2.1 MiB
+    "maxSize": 2621440
+  },
+  "formatter": {
+    "enabled": true, //ativa o formatador automático do Biome
+    "useEditorconfig": true, //faz com que o Biome siga as regras definidas no .editorconfig
+    "lineWidth": 100 //aumenta quantidade de caracteres escritos em uma única linha
+  },
+  "organizeImports": {
+    "enabled": true //ativa a organização automática de imports
+  },
+  "linter": {
+    "enabled": true, //ativa o linting para detectar e corrigir erros de código
+    "rules": {
+      "recommended": true //usa o conjunto de regras recomendadas pelo Biome
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    }
+  }
+}

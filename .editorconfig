@@ -1,0 +1,23 @@
+root = true
+
+[*]
+# espaços para indentação (padrão recomendado para JS/TS)
+indent_style = space
+
+# tamanho da indentação (padrão para JS, TS e React)
+indent_size = 2
+
+# "LF" (line feed) como terminador de linha, garantindo compatibilidade entre sistemas
+end_of_line = lf
+
+# codificação de caracteres como UTF-8 para suportar caracteres especiais
+charset = utf-8
+
+# remove espaços em branco no final das linhas automaticamente
+trim_trailing_whitespace = true
+
+# Garante que os arquivos sempre terminem com uma linha vazia (evita problemas comono caso do git)
+insert_final_newline = true
+
+# aspas duplas (") como padrão para strings (seguindo a recomendação do Biome)
+quote_type = double
