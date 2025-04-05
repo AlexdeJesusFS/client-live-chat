@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
-import Sidebar from "./components/Sidebar";
 import ChatWindow from "./components/ChatWindow";
+import Sidebar from "./components/Sidebar";
 import type { Contact } from "./types";
 import "./App.css";
 

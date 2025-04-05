@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState, type FormEvent } from "react";
+import { type FormEvent, useState } from "react";
 import type { Message } from "../../types";
 import styles from "./styles.module.css";
 

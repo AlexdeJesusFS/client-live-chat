@@ -1,7 +1,7 @@
 import type React from "react";
+import avatarImg from "../../assets/avatar.jpg";
 import type { Contact } from "../../types";
 import styles from "./styles.module.css";
-import avatarImg from "../../assets/avatar.jpg";
 
 interface SidebarProps {
   contacts: Contact[];
@@ -9,6 +9,17 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ contacts, onSelectContact }) => {
+  const handleSelectContact = (contactName: string) => {
+    onSelectContact(contactName);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, contactName: string) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault(); // Evita comportamentos padrão, como rolagem com Space
+      handleSelectContact(contactName);
+    }
+  };
+
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarHeader}>
@@ -19,9 +30,10 @@ const Sidebar: React.FC<SidebarProps> = ({ contacts, onSelectContact }) => {
           <div
             key={contact.id}
             className={styles.contact}
-            onClick={() => onSelectContact(contact.name)}
+            onClick={() => handleSelectContact(contact.name)}
+            onKeyDown={(e) => handleKeyDown(e, contact.name)}
           >
-            <img src={avatarImg} alt="Avatar" className={styles.avatar} />
+            <img src={avatarImg} alt={`Avatar de ${contact.name}`} className={styles.avatar} />
             <div className={styles.contactInfo}>
               <h4>{contact.name}</h4>
               <p>{contact.lastMessage}</p>
