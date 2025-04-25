@@ -1,12 +1,14 @@
-export interface Message {
-  id: number;
-  text: string;
-  sender: string;
-  timestamp: string;
-}
+export type Message = {
+  type: "message" | "system" | "contacts";
+  sender?: string;
+  text?: string;
+  timestamp?: string;
+  contacts?: Contact[];
+};
 
-export interface Contact {
+export type Contact = {
   id: number;
   name: string;
-  lastMessage: string;
-}
+  last_message: string;
+  avatar: string;
+};

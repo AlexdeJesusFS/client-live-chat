@@ -19,6 +19,9 @@
   overflow-y: auto;
   background-image: url("../../assets/background-chat.jpg");
   background-size: cover;
+
+  overflow-y: auto;
+  overflow-x: hidden; /*para evitar scroll horizontal em msg grandes*/
 }
 
 .message {
@@ -27,6 +30,10 @@
   border-radius: 10px;
   max-width: 70%;
   position: relative;
+
+  white-space: pre-wrap; /*para exibir quebras de linha*/
+  overflow-wrap: break-word; /*auto quebrar linha em msg grandes*/
+  max-width: 80%; /*garantir tamanho correto para msg grande*/
 }
 
 .messageReceived {
@@ -54,14 +61,21 @@
   padding: 10px;
   background-color: #f0f2f5;
   border-top: 1px solid #ddd;
+
+  align-items: flex-end;
 }
 
-.chatFooter input {
+.chatFooter textarea {
   flex: 1;
   padding: 10px;
   border: none;
   border-radius: 20px;
   margin-right: 10px;
+  height: 18px;
+
+  min-height: 18px;
+  max-height: 90px;
+  overflow-x: hidden;
 }
 
 .chatFooter button {
@@ -71,4 +85,15 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
+}
+
+.systemMessage {
+  align-self: center;
+  text-align: center;
+  background-color: #fffff0;
+  padding: 5px 10px;
+  border-radius: 12px;
+  color: #696969;
+  font-size: 0.9rem;
+  margin: 10px 0;
 }

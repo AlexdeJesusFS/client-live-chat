@@ -1,50 +1,35 @@
-import type React from "react";
-import { type FormEvent, useState } from "react";
-import type { Message } from "../../types";
+import { type FormEvent, type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { IoSend } from "react-icons/io5";
 import styles from "./styles.module.css";
+import type { ChatWindowProps } from "./types";
 
-interface ChatWindowProps {
-  selectedContact: string;
-}
-
-const ChatWindow: React.FC<ChatWindowProps> = ({ selectedContact }) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Encontre empresas locais, visualize mapas e obtenha rotas de trajeto no Google Maps.",
-      sender: "Maria",
-      timestamp: "7:10 AM",
-    },
-    {
-      id: 2,
-      text: "Aqui na Loft, garantimos um ambiente inclusivo e livre de discriminação...",
-      sender: "Maria",
-      timestamp: "10:35 AM",
-    },
-    {
-      id: 3,
-      text: "No meu site pessoal",
-      sender: "You",
-      timestamp: "9:34 PM",
-    },
-  ]);
-
+const ChatWindow = ({ selectedContact, messages, onSendMessage, currentUser }: ChatWindowProps) => {
   const [newMessage, setNewMessage] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSendMessage = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (newMessage.trim() === "") return;
 
-    const message: Message = {
-      id: messages.length + 1,
-      text: newMessage,
-      sender: "You",
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    };
-
-    setMessages([...messages, message]);
+    onSendMessage(newMessage);
     setNewMessage("");
   };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (newMessage.trim()) {
+        onSendMessage(newMessage);
+        setNewMessage("");
+      }
+    }
+  };
+
+  // Rolagem automática para baixo quando novas mensagens chegam
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   return (
     <div className={styles.chatWindow}>
@@ -52,26 +37,46 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ selectedContact }) => {
         <h3>{selectedContact}</h3>
       </div>
       <div className={styles.chatBody}>
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`${styles.message} ${
-              message.sender === "You" ? styles.messageSent : styles.messageReceived
-            }`}
-          >
-            <p>{message.text}</p>
-            <span className={styles.timestamp}>{message.timestamp}</span>
-          </div>
-        ))}
+        {messages.map((message, index) => {
+          if (message.type === "system") {
+            return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              <div key={index} className={styles.systemMessage}>
+                <p>
+                  {message.text} {message.timestamp}
+                </p>
+              </div>
+            );
+          }
+
+          const isCurrentUser = message.sender === currentUser;
+
+          return (
+            <div
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              key={index}
+              className={`${styles.message} ${
+                isCurrentUser ? styles.messageSent : styles.messageReceived
+              }`}
+            >
+              {!isCurrentUser && <span className={styles.sender}>{message.sender}</span>}
+              <p>{message.text}</p>
+              <span className={styles.timestamp}>{message.timestamp}</span>
+            </div>
+          );
+        })}
+        <div ref={messagesEndRef} />
       </div>
-      <form className={styles.chatFooter} onSubmit={handleSendMessage}>
-        <input
-          type="text"
+      <form className={styles.chatFooter} onSubmit={handleSubmit}>
+        <textarea
+          onKeyDown={handleKeyDown}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Type a message"
+          placeholder="Type your message"
         />
-        <button type="submit">Send</button>
+        <button type="submit">
+          <IoSend />
+        </button>
       </form>
     </div>
   );
