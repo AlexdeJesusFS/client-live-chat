@@ -1,44 +1,33 @@
-import type React from "react";
-import avatarImg from "../../assets/avatar.jpg";
-import type { Contact } from "../../types";
+import { PiChatsCircleFill } from "react-icons/pi";
+import globalAvatarImg from "../../assets/global avatar.png";
 import styles from "./styles.module.css";
+import type { SidebarProps } from "./types";
 
-interface SidebarProps {
-  contacts: Contact[];
-  onSelectContact: (contactName: string) => void;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ contacts, onSelectContact }) => {
-  const handleSelectContact = (contactName: string) => {
-    onSelectContact(contactName);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, contactName: string) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault(); // Evita comportamentos padrão, como rolagem com Space
-      handleSelectContact(contactName);
-    }
-  };
-
+const Sidebar = ({ contacts, onSelectContact }: SidebarProps) => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarHeader}>
         <h2>Chats</h2>
+        <PiChatsCircleFill size={40} />
       </div>
       <div className={styles.contactList}>
         {contacts.map((contact) => (
-          <div
+          <button
             key={contact.id}
             className={styles.contact}
-            onClick={() => handleSelectContact(contact.name)}
-            onKeyDown={(e) => handleKeyDown(e, contact.name)}
+            onClick={() => onSelectContact(contact.name)}
+            type="button"
           >
-            <img src={avatarImg} alt={`Avatar de ${contact.name}`} className={styles.avatar} />
+            <img
+              src={globalAvatarImg}
+              alt={`Avatar de ${contact.name}`}
+              className={styles.avatar}
+            />
             <div className={styles.contactInfo}>
               <h4>{contact.name}</h4>
-              <p>{contact.lastMessage}</p>
+              <p>{contact.last_message}</p>
             </div>
-          </div>
+          </button>
         ))}
       </div>
     </div>

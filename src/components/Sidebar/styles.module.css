@@ -10,6 +10,9 @@
   padding: 15px;
   background-color: #00a1d6;
   color: white;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .contactList {
@@ -19,9 +22,16 @@
 
 .contact {
   display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  align-items: center;
   cursor: pointer;
+  padding: 10px;
+  /* Reset button styles */
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  color: #000;
 }
 
 .contact:hover {
